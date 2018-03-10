@@ -75,6 +75,8 @@ $ip_list =
     '46.165.0.0/16',
     '46.173.0.0/16',
     '87.106.0.0/16',
+    '89.185.0.0/16',
+    '93.189.0.0/16',
     '146.255.0.0/16',
     '185.159.0.0/16',
     '194.58.0.0/16',
@@ -209,14 +211,26 @@ foreach($codes as $code)
     }
 }
 
-if(!file_exists('output'))
+$output_dir = '';
+$ext = explode('.', $pcap);
+$ext = end($ext);
+$basename = basename($pcap);
+if($basename === $ext)
 {
-    mkdir('output');
+    $output_dir = '_output';
+}
+else
+{
+    $output_dir = substr($basename, 0, strlen($basename) - strlen($ext) - 1);
+}
+if(!file_exists($output_dir))
+{
+    mkdir($output_dir);
 }
 $digit = strlen(count($data));
 for($i=0; $i<count($data); $i++)
 {
-    $filename = 'output/' . str_pad($i, $digit, '0', STR_PAD_LEFT) . '_' . $data[$i]['command'] . '.bin';
+    $filename = $output_dir . '/' . str_pad($i, $digit, '0', STR_PAD_LEFT) . '_' . $data[$i]['command'] . '.bin';
     $command = 'Unknown';
     if($data[$i]['command'] === '01')
     {
